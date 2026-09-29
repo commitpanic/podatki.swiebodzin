@@ -751,6 +751,16 @@ p {
   opacity: 0.85;
 }
 
+.footer-credits {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-credits a:hover {
+  color: var(--color-accent-light);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .split,
