@@ -757,6 +757,11 @@ p {
   gap: 14px;
 }
 
+.footer-credits a {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .footer-credits a:hover {
   color: var(--color-accent-light);
 }
