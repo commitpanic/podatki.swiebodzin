@@ -34,4 +34,8 @@ Plik `.nojekyll` jest już dodany, aby GitHub Pages nie przetwarzał strony prze
 
 ## Formularz kontaktowy
 
-Ponieważ GitHub Pages nie obsługuje backendu, formularz na stronie kontaktowej otwiera domyślny klient poczty użytkownika z gotową treścią wiadomości (`mailto:`). Jeśli w przyszłości potrzebna będzie wysyłka bez pośrednictwa klienta pocztowego, można podpiąć usługę typu Formspree/Getform i zmienić `assets/js/main.js`.
+GitHub Pages nie obsługuje backendu, więc formularz na stronie głównej (sekcja `#kontakt`) wysyła wiadomości przez [EmailJS](https://www.emailjs.com). Identyfikatory usługi, szablonu i klucz publiczny są w `assets/js/main.js`. Klucz publiczny EmailJS jest z założenia jawny.
+
+Formularz przekazuje do szablonu zmienne: `{{name}}`, `{{from_name}}`, `{{email}}`, `{{reply_to}}`, `{{phone}}`, `{{message}}`, `{{title}}`.
+
+Ochrona przed spamem: ukryte pole-pułapka `website` w formularzu. Dodatkowo w panelu EmailJS (Account → Security) warto ograniczyć dozwolone domeny do adresu strony.

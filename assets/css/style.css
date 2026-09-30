@@ -262,21 +262,66 @@ p {
   transition: all var(--transition);
 }
 
+.nav-toggle.is-active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.is-active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* ---------- Hero ---------- */
 .hero {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 88vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(120deg, rgba(23, 22, 19, 0.92), rgba(36, 34, 32, 0.78)), url("../img/DSC_6625.jpg");
-  background-size: cover;
-  background-position: center 20%;
+  background-color: var(--color-dark-2);
   color: #fff;
+  /* Horizontal centre of the portrait, measured from the left edge of the content column.
+     Tied to the content (not the screen edge), so on wide screens the photo stays next to the text. */
+  --hero-photo-center: 940px;
+}
+
+/* Portrait photo */
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  top: -3%;
+  height: 115%;
+  aspect-ratio: 1452 / 2048;
+  left: min(calc(max(0px, (100% - var(--max-width)) / 2) + var(--hero-photo-center)), calc(100% - 260px));
+  transform: translateX(-50%);
+  background-image: url("../img/DSC_6625.jpg");
+  background-image: image-set(url("../img/DSC_6625.webp") type("image/webp"), url("../img/DSC_6625.jpg") type("image/jpeg"));
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  /* Soft left and right edges, so the photo melts into the dark background */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 30%, #000 78%, transparent 100%);
+}
+
+/* Darkening behind the text */
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(23, 22, 19, 0.96) 0%, rgba(23, 22, 19, 0.85) 38%, rgba(23, 22, 19, 0.1) 62%, rgba(23, 22, 19, 0.2) 100%);
 }
 
 .hero-inner {
   max-width: 640px;
-  padding: 100px 0;
+  margin: 0 0 0 max(0px, calc((100% - var(--max-width)) / 2));
+  padding: 100px 24px;
 }
 
 .hero .eyebrow {
@@ -302,41 +347,45 @@ p {
   flex-wrap: wrap;
 }
 
-.hero-meta {
-  margin-top: 46px;
-  display: flex;
-  gap: 36px;
-  flex-wrap: wrap;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 24px;
-}
-
-.hero-meta div strong {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  color: #fff;
-}
-
-.hero-meta div span {
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.65);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
 /* ---------- KIDP credential section ---------- */
 .kidp-section {
   background: #fff;
   border-bottom: 1px solid var(--color-border);
-  padding: 48px 0;
-  text-align: center;
+  padding: 24px 0;
+}
+
+.kidp-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
 }
 
 .kidp-section img {
-  width: clamp(180px, 22vw, 320px);
+  width: clamp(160px, 18vw, 240px);
   height: auto;
-  margin: 0 auto;
+  flex: none;
+}
+
+.kidp-caption {
+  margin: 0;
+  padding-left: 40px;
+  border-left: 1px solid var(--color-border);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: var(--color-dark-2);
+}
+
+.kidp-caption span {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 }
 
 /* ---------- Page header (subpages) ---------- */
@@ -455,33 +504,14 @@ p {
   z-index: -1;
 }
 
-.stat-row {
-  display: flex;
-  gap: 40px;
-  margin-top: 34px;
-  padding-top: 28px;
-  border-top: 1px solid var(--color-border);
-}
-
-.stat-row strong {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 1.6rem;
-  color: var(--color-accent);
-}
-
-.stat-row span {
-  font-size: 0.82rem;
-  color: var(--color-muted);
-}
-
 /* ---------- Services detail (uslugi page) ---------- */
 .service-block {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 60px minmax(0, 720px);
   gap: 26px;
   padding: 40px 0;
   border-bottom: 1px solid var(--color-border);
+  scroll-margin-top: 90px;
 }
 
 .service-block:last-child {
@@ -503,10 +533,63 @@ p {
   color: var(--color-muted);
 }
 
+.service-list {
+  margin-top: 4px;
+  display: grid;
+  gap: 8px;
+}
+
+.service-list li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--color-text);
+  font-size: 0.97rem;
+}
+
+.service-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 10px;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+/* ---------- Steps (uslugi page) ---------- */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.step {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  padding: 30px 28px;
+}
+
+.step-number {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+}
+
+.step h3 {
+  font-size: 1.1rem;
+}
+
+.step p {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
 /* ---------- Values list ---------- */
 .values {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 26px;
   margin-top: 40px;
 }
@@ -630,6 +713,47 @@ p {
   border-color: var(--color-accent);
 }
 
+.legal a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.form .btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  border-left: 3px solid;
+}
+
+.form-status--success {
+  background: #eef5ee;
+  border-color: #4a7c59;
+  color: #2f5a3b;
+}
+
+.form-status--error {
+  background: #f8eeec;
+  border-color: #a6493a;
+  color: #7a2f23;
+}
+
+.form {
+  position: relative;
+}
+
 .form-note {
   font-size: 0.8rem;
   color: var(--color-muted);
@@ -722,6 +846,7 @@ p {
 }
 
 .site-footer p,
+.site-footer li,
 .site-footer a {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.65);
@@ -777,9 +902,17 @@ p {
     order: -1;
   }
 
+  .split-media::before {
+    display: none;
+  }
+
   .grid--3,
   .values {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
   }
 
   .footer-grid {
@@ -813,12 +946,31 @@ p {
     display: flex;
   }
 
-  .nav-cta {
+  .nav-links a.nav-cta {
     margin-left: 0;
   }
 
   .form-row {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Portrait screens (phones, tablets held upright): photo fills the hero, text over the darker lower part */
+@media (max-aspect-ratio: 1/1), (max-width: 768px) {
+  .hero::before {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    transform: none;
+    background-position: 62% 12%;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .hero::after {
+    background: linear-gradient(180deg, rgba(23, 22, 19, 0.7) 0%, rgba(23, 22, 19, 0.9) 60%, rgba(23, 22, 19, 0.96) 100%);
   }
 }
 
@@ -833,8 +985,16 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .hero-meta {
-    gap: 24px;
+  .kidp-inner {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .kidp-caption {
+    padding-left: 0;
+    border-left: none;
+    font-size: 1.05rem;
   }
 
   .footer-grid {

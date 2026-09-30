@@ -42,26 +42,13 @@
       <a href="#kontakt" class="btn btn--primary">Skontaktuj się</a>
       <a href="uslugi.html" class="btn btn--outline">Zobacz usługi</a>
     </div>
-    <div class="hero-meta">
-      <div>
-        <strong>14765</strong>
-        <span>Nr wpisu na listę</span>
-      </div>
-      <div>
-        <strong>Lubuskie</strong>
-        <span>Obszar działania</span>
-      </div>
-      <div>
-        <strong>Kompleksowa</strong>
-        <span>Obsługa podatkowa</span>
-      </div>
-    </div>
   </div>
 </section>
 
 <section class="kidp-section">
-  <div class="container">
+  <div class="container kidp-inner">
     <img src="assets/img/KIDP_wersja_pelna_achromatyczna.svg" alt="Krajowa Izba Doradców Podatkowych" />
+    <p class="kidp-caption">Członek Krajowej Izby Doradców Podatkowych<span>Nr wpisu 14765</span></p>
   </div>
 </section>
 
@@ -192,7 +179,13 @@
             <input type="checkbox" id="consent" name="consent" required />
             <span>Wyrażam zgodę na przetwarzanie moich danych osobowych w celu udzielenia odpowiedzi na zapytanie. Więcej w <a href="polityka-prywatnosci.html">polityce prywatności</a>.</span>
           </label>
+          <!-- Pułapka na boty: pole niewidoczne dla ludzi, boty zwykle je wypełniają -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="website">Strona www</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
           <button type="submit" class="btn btn--primary">Wyślij wiadomość</button>
+          <p class="form-status" role="status" aria-live="polite" hidden></p>
         </form>
       </div>
     </div>
@@ -237,6 +230,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
